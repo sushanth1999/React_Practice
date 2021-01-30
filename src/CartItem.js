@@ -14,9 +14,22 @@ class CartItem extends React.Component {
         // this.increaseQty = this.increaseQty.bind(this)
     }
     increaseQty = ()=>{
-        console.log("this.start",this.state)
-        this.state.qty++;
+        // console.log("this.start",this.state)
+        // this doesn't work
+        // this.state.qty++;
+
+        //Method - 1 (Reender our component with updated value)
+        // If Prev State is not required.
+        this.setState({
+            title : "Mobile Phone"
+        });
+
+        // Method - 2 If previous state is required
+        this.setState((prevState) =>  {return {qty:prevState.qty+1}})
     }
+    decQty = ()=>{
+        this.setState((prevState)=>{return {qty:prevState.qty-1}})
+    };
    render(){
     //    Object destructuring
        const {price,title,qty} = this.state
@@ -40,7 +53,7 @@ class CartItem extends React.Component {
 
                         <img alt ="decrease" 
                         className="action-icons" 
-                        src=""></img>
+                        src="" onClick={this.decQty}></img>
                         
                         <img alt ="delete" 
                         className="action-icons" 
