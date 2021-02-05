@@ -20,6 +20,9 @@ class CartItem extends React.Component {
 
         //Method - 1 (Reender our component with updated value)
         // If Prev State is not required.
+        //A call back function can also be added in both methods
+        // that func will help to call this.state after it is successfully
+        //updated as setState are asynchronously called;
         this.setState({
             title : "Mobile Phone"
         });
@@ -28,6 +31,10 @@ class CartItem extends React.Component {
         this.setState((prevState) =>  {return {qty:prevState.qty+1}})
     }
     decQty = ()=>{
+        const {qty} = this.state;
+        if(qty == 0)
+         return;
+
         this.setState((prevState)=>{return {qty:prevState.qty-1}})
     };
    render(){
