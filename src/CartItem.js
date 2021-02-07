@@ -1,18 +1,6 @@
 import React from "react";
 
 class CartItem extends React.Component {
-    constructor(){
-    //    to call constructor of parent else it will show error
-        super();
-        this.state = {
-            price : 999,
-            title : 'Phone',
-            qty : 1,
-            img : ""
-        }
-        // USed for binding
-        // this.increaseQty = this.increaseQty.bind(this)
-    }
     increaseQty = ()=>{
         // console.log("this.start",this.state)
         // this doesn't work
@@ -38,16 +26,20 @@ class CartItem extends React.Component {
         this.setState((prevState)=>{return {qty:prevState.qty-1}})
     };
    render(){
-    //    Object destructuring
-       const {price,title,qty} = this.state
-       return(
+       console.log(this.props)
+    //    Object destructuring passing values as State
+      // const {price,title,qty} = this.state
+    //    Object destructuring passing values as Props
+    const {price,title,qty} = this.props.product;
+
+    return(
            <div className = "cart-item">
                <div className="left-block">
                    {/* Passig a object for style */}
                     <img style = {styles.image}></img>
                </div>
                <div className = "right-block">
-                    <div style = {{fontSize:25}}>{this.state.title}</div>
+                    <div style = {{fontSize:25}}>{this.props.title}</div>
                     <div style = {{color : "gray"}}>Rs {price}</div>
                     <div style = {{color : "gray"}}>Qty : {qty}</div>
                     <div className="cart-item-actions">
