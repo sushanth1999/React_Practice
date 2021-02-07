@@ -34,12 +34,40 @@ class Cart extends React.Component {
             // USed for binding
             // this.increaseQty = this.increaseQty.bind(this)
         }
+        handleIncreaseQuantity = (product)=>{
+            console.log("Hey Increase The Quant. ",product)
+            const {products} = this.state;
+
+            const index = products.indexOf(product);
+            products[index].qty+=1;
+
+            this.setState({
+                products:products
+           })
+        }
+        handleDecreaseQuantity = (product)=>{
+            console.log("Hey Decrease The Quant. ",product)
+            const {products} = this.state;
+
+            const index = products.indexOf(product);
+            products[index].qty-=1;
+
+            this.setState({
+                products:products
+           })
+        }
    render(){
        return(
           <div className = "cart">
               {/* Passing A Prop */}
               {this.state.products.map((items) =>
-              <CartItem product = {items} key = {items.id}></CartItem>
+              <CartItem 
+              product = {items} 
+              key = {items.id}
+              onIncreaseQuantity = {this.handleIncreaseQuantity}
+              onDecreaseQuantity = {this.handleDecreaseQuantity}
+              >     
+              </CartItem>
               )}
         </div>
        );
