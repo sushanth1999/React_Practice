@@ -1,7 +1,9 @@
 import CartItem from "./CartItem";
 import React from "react";
 import Cart from "./Cart";
-import Navbar from "./Navbar"
+import Navbar from "./Navbar";
+import firebase from 'firebase';
+
 
 import { render } from "@testing-library/react";
 
@@ -10,34 +12,60 @@ class App extends React.Component {
     //    to call constructor of parent else it will show error
         super();
         this.state = {
-           products : [
-                {
-                    price : 999,
-                    title : 'Phone',
-                    qty : 1,
-                    img : "",
-                    id: 1
-                },
-                {
-                    price : 999,
-                    title : 'Watch',
-                    qty : 1,
-                    img : "",
-                    id:2
-                },
-                {
-                    price : 999,
-                    title : 'Laptop',
-                    qty : 1,
-                    img : "",
-                    id : 3
-                },
-
-           ]
+           products : [],
+           loading : true
         }
         // USed for binding
         // this.increaseQty = this.increaseQty.bind(this)
     }
+
+    componentDidMount(){
+      // firebase.firestore().collection('products')
+      //         .get().then((snapshot)=>{
+      //           console.log(snapshot);
+
+      //           snapshot.docs.map((doc)=>{
+      //             console.log(doc.data);
+      //           });
+
+      //           const products = snapshot.docs.map((doc)=>{
+      //             const data = doc.data();
+
+      //             data['id'] = doc.id;
+      //            return data;
+      //           });
+
+
+      //           this.setState({
+      //             products : products,
+      //             loading : false
+      //           })
+      //         })
+
+       firebase.firestore()
+               .collection('products')
+               .onSnapshot((snapshot)=>{
+                console.log(snapshot);
+
+                snapshot.docs.map((doc)=>{
+                  console.log(doc.data);
+                });
+
+                const products = snapshot.docs.map((doc)=>{
+                  const data = doc.data();
+
+                  data['id'] = doc.id;
+                 return data;
+                });
+
+
+                this.setState({
+                  products,
+                  loading : false
+                })
+              })
+    }
+
     handleIncreaseQuantity = (product)=>{
         console.log("Hey Increase The Quant. ",product)
         const {products} = this.state;
@@ -96,6 +124,23 @@ class App extends React.Component {
 
       return cartTotal
     }
+
+    addProduct = () =>{
+      firebase.firestore().collection('products')
+              .add({
+                img : '',
+                price : 900,
+                qty : 3,
+                title : 'washing machine'
+              })
+              .then((docRef)=>{
+                console.log(docRef);
+                return '';
+              })
+              .catch((error)=>{
+                console.log(error);
+              })
+    }
   render(){
     const {products} = this.state;
   return (
@@ -103,13 +148,17 @@ class App extends React.Component {
       <Navbar
           count = {this.getCount()}
       ></Navbar>
+      <button onClick = {this.addProduct}></button>
       <Cart
-      products = {products}
+        products = {products}
         onIncreaseQuantity = {this.handleIncreaseQuantity}
         onDecreaseQuantity = {this.handleDecreaseQuantity}
         onDeleteProduct = {this.handleDeleteProduct}
       ></Cart>
-      <div>
+    
+      {this.state.loading && <h1>Loading Products ...</h1>}
+     
+      <div> 
         total : {this.getCartTotal()}
       </div>
     </div>
