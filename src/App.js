@@ -17,6 +17,8 @@ class App extends React.Component {
         }
         // USed for binding
         // this.increaseQty = this.increaseQty.bind(this)
+
+        this.db = firebase.firestore();
     }
 
     componentDidMount(){
@@ -71,22 +73,42 @@ class App extends React.Component {
         const {products} = this.state;
 
         const index = products.indexOf(product);
-        products[index].qty+=1;
+       
+      //   products[index].qty+=1;
 
-        this.setState({
-            products:products
-       })
+      //   this.setState({
+      //       products:products
+      //  })
+      const docRef = this.db.collection('products').doc(products[index].id);
+
+      docRef.update({
+        qty : products[index].qty + 1
+      }).then(()=>{
+        console.log('updated');
+      }).catch((error)=>{
+        console.log(error);
+      })
     }
     handleDecreaseQuantity = (product)=>{
         console.log("Hey Decrease The Quant. ",product)
         const {products} = this.state;
 
         const index = products.indexOf(product);
-        products[index].qty-=1;
+       
+      //   products[index].qty-=1;
 
-        this.setState({
-            products:products
-       })
+      //   this.setState({
+      //       products:products
+      //  })
+      const docRef = this.db.collection('products').doc(products[index].id);
+
+      docRef.update({
+        qty : products[index].qty - 1
+      }).then(()=>{
+        console.log('updated');
+      }).catch((error)=>{
+        console.log(error);
+      })
     }
     handleDeleteProduct = (id)=>{
 
